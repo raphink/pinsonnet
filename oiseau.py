@@ -2,15 +2,13 @@
 
 from fastai.vision import *
 import sys
-
-image = sys.argv[1]
-
+import warnings
 
 defaults.device = torch.device('cpu')
-
-img = open_image(image)
 learn = load_learner('.')
+warnings.simplefilter("ignore")
 
-pred_class,pred_idx,outputs = learn.predict(img)
-print(pred_class)
-
+for image in sys.argv[1:]:
+    img = open_image(image)
+    pred_class,pred_idx,outputs = learn.predict(img)
+    print('%s: %s (%.2f%%)' % (image, pred_class, outputs.max()*100))
